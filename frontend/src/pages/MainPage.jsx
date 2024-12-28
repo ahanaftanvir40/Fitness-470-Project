@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import fitnessImg from '../assets/fitnessImg.jpg'
+import tipsImg from '../assets/tipsImg.jpg'
 
 export default function MainPage() {
   const { user, isLoading, setUser } = useUserContext();
@@ -23,6 +25,33 @@ export default function MainPage() {
     dietPlan: '',
   });
 
+  const [tips, setTips] = useState([]);
+  const [currentTip , setCurrentTip] = useState('')
+
+
+
+  //fetch tips
+  useEffect(() => {
+    try {
+      const fetchTips = async () => {
+        const response = await axios.get("http://localhost:3000/api/healthtips/getTips");
+        setTips(response.data.SendTips);
+        console.log("ACTUAL TIPS: ", response.data.SendTips);
+
+      }
+      fetchTips();
+    } catch (error) {
+      toast.error("Error fetching health tips");
+      console.log("Error fetching health tips:", error);
+
+    }
+  }, [])
+  console.log("Tips:", tips);
+
+  useEffect(() => {
+    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+    setCurrentTip(randomTip);
+  }, [tips]);
 
 
 
@@ -110,29 +139,75 @@ export default function MainPage() {
         </aside>
 
         <main className="flex-1 p-10">
-          <h1 className="text-xl font-light text-white/80 bg-green-600 w-fit p-2 rounded-lg  ">Welcome {user.firstName}!</h1>
-          {user.dietPlan === "weight_gain" && (
-            <div className="py-4 w-fit">
-              <div className="card bg-base-100 image-full w-96 shadow-xl">
-                <figure>
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes" />
-                </figure>
-                <div className="card-body">
-                  <h2 className="card-title text-white/80">Fitness Goal</h2>
-                  <p>Your current goal is to <span className="font-bold text-white">gain weight</span> We know you can do it!</p>
-                  <div className="card-actions justify-end">
-                    <Link to="/roadmap">
-                      <button className="btn btn-primary text-white">Roadmap</button>
-                    </Link>
+          <h1 className="text-xl font-light text-white/80 bg-pink-600 w-fit p-2 mx-auto rounded-lg mb-6 border-8 border-pink-500 ">Welcome {user.firstName}</h1>
+          <div className="flex gap-10 justify-center">
+            {user.dietPlan && (
+              <div className="py-4 w-fit">
+                <div className="card bg-base-100 image-full w-96 h-64 shadow-xl">
+                  <figure>
+                    <img
+                      className=" object-cover"
+                      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                      alt="Shoes" />
+                  </figure>
+                  <div className="card-body">
+                    <h2 className="card-title text-white">Fitness Goal</h2>
+                    {user.dietPlan === 'weight_gain' ? (
+                      <p>Your current goal is to <span className="font-bold text-white">gain weight</span> We know you can do it!</p>
+                    ) : (
+                      <p>Your current goal is to <span className="font-bold text-white">lose weight</span> We know you can do it!</p>
+                    )}
+
+                    <div className="card-actions justify-end">
+                      <Link to="/roadmap">
+                        <button className="btn btn-primary text-white">Roadmap</button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div className="py-4 w-fit">
+              <div className="card bg-base-100 image-full w-96 h-64 shadow-xl">
+                <figure>
+                  <img
+                    className=" object-c"
+                    src={fitnessImg}
+                    alt="Shoes" />
+                </figure>
+                <div className="card-body">
+                  <h2 className="card-title text-white">Health Status</h2>
+                  {user.bmi < 18.5 ? (
+                    <p className="text-white/80">You should <span className="font-bold text-white">gain some weight</span> according to your BMI Choose your diet plan now!</p>
+                  ) : (
+                    <p className="text-white/80">You should <span className="font-bold text-white">lose some weight</span> according to your <span className="font-bold text-white">BMI</span> Choose your diet plan now!</p>
+                  )}
+
+
+                </div>
+              </div>
+            </div>
+
+            <div className="py-4 w-fit">
+              <div className="card bg-base-100 image-full w-96 h-64 shadow-xl">
+                <figure>
+                  <img
+                    className=" object-c"
+                    src={tipsImg}
+                    alt="Shoes" />
+                </figure>
+                <div className="card-body">
+                  <h2 className="card-title text-white">Daily Health Tips!</h2>
+                    <p className="text-white">{currentTip}</p>         
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-2">
 
             <Card>
               <CardHeader>
@@ -189,6 +264,8 @@ export default function MainPage() {
               Save Changes
             </Button>
           </motion.div>
+
+         
 
 
         </main>
