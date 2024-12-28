@@ -8,6 +8,7 @@ connectDB()
 //importing routes
 import userRoutes from './routes/userRoutes.js'
 import healthTipsRoutes from './routes/healthTipsRoutes.js'
+import mealsRoutes from './routes/mealsRoutes.js'
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(cors());
 //routes
 app.use('/api/user', userRoutes)
 app.use('/api/healthtips', healthTipsRoutes)
+app.use('/api/meals', mealsRoutes)
 
 
 export default app; 

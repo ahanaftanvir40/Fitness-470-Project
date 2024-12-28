@@ -4,11 +4,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from "axios";
+import toast from "react-hot-toast";
 
 function Roadmap() {
     const [user, setUser] = useState({});
     const [meals, setMeals] = useState([]);
     const [exercises, setExercises] = useState([]);
+    const [suggestedMeals, setSuggestedMeals] = useState();
+
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -25,6 +29,34 @@ function Roadmap() {
         };
         fetchUser();
     }, []);
+
+
+    //fetchMeals
+    useEffect(() => {
+        try {
+            const fetchMeals = async () => {
+                const response = await axios.get('http://localhost:3000/api/meals/getMeals');
+                console.log("MEALS: ", response.data.SendMeals);
+                setSuggestedMeals(response.data.SendMeals);
+            }
+            fetchMeals();
+
+        } catch (error) {
+            toast.error("Error fetching meals");
+            console.log("Error fetching meals:", error);
+        }
+    }, [])
+
+    let weightLossMeals;
+    let weightGainMeals;
+    if (suggestedMeals) {
+        weightLossMeals = suggestedMeals.filter(meal => meal.dietPlanType === "weightLoss");
+        weightGainMeals = suggestedMeals.filter(meal => meal.dietPlanType === "weightGain");
+    }
+
+    console.log("Weight Loss Meals: ", weightLossMeals);
+    console.log("Weight Gain Meals: ", weightGainMeals);
+
 
     useEffect(() => {
         const weightLossMeals = [
@@ -102,6 +134,50 @@ function Roadmap() {
                             </Table>
                         </CardContent>
                     </Card>
+
+                    <div className="py-10">
+                        <h1 className="text-black/80 font-bold text-3xl">Suggested Meals</h1>
+                        <div className="flex gap-4 mt-6">
+                            {user.dietPlan === "weight_loss" && weightLossMeals && weightLossMeals.map((meal, index) => (
+                                <>
+                                    <div key={index} className="card image-full w-96 shadow-xl">
+                                        <figure>
+                                            <img
+                                                src={meal.image}
+                                                alt="Shoes" />
+                                        </figure>
+                                        <div className="card-body">
+                                            <h2 className="card-title text-gray-50">{meal.name}</h2>
+                                            <p className="text-white/80">{meal.description}</p>
+                                            <div className="card-actions justify-end">
+                                                <button className="btn btn-primary text-white">Recipe</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            ))}
+                            {user.dietPlan === "weight_gain" && weightGainMeals && weightGainMeals.map((meal, index) => (
+                                <>
+                                    <div key={index} className="card image-full w-96 shadow-xl">
+                                        <figure>
+                                            <img
+                                                src={meal.image}
+                                                alt="Shoes" />
+                                        </figure>
+                                        <div className="card-body">
+                                            <h2 className="card-title text-gray-50">{meal.name}</h2>
+                                            <p className="text-white/80">{meal.description}</p>
+                                            <div className="card-actions justify-end">
+                                                <button className="btn btn-primary text-white">Recipe</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            ))}
+
+
+                        </div>
+                    </div>
                 </TabsContent>
 
                 <TabsContent value="exercises">

@@ -16,6 +16,9 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import fitnessImg from '../assets/fitnessImg.jpg'
 import tipsImg from '../assets/tipsImg.jpg'
+import { User, Activity, Ruler, Weight } from 'lucide-react'
+import { Progress } from "@/components/ui/progress"
+import { Separator } from "@/components/ui/separator"
 
 export default function MainPage() {
   const { user, isLoading, setUser } = useUserContext();
@@ -26,7 +29,7 @@ export default function MainPage() {
   });
 
   const [tips, setTips] = useState([]);
-  const [currentTip , setCurrentTip] = useState('')
+  const [currentTip, setCurrentTip] = useState('')
 
 
 
@@ -67,6 +70,16 @@ export default function MainPage() {
       return (447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)).toFixed(2);
     }
   };
+
+  function getBMICategory(bmi) {
+    if (bmi < 18.5) return "Underweight"
+    if (bmi < 25) return "Normal weight"
+    if (bmi < 30) return "Overweight"
+    return "Obese"
+  }
+
+  const bmiCategory = user && user.bmi ? getBMICategory(user.bmi) : "Unknown";
+  const bmiProgress = user && user.bmi ? (user.bmi / 30) * 100 : 0;
 
   useEffect(() => {
     if (user) {
@@ -119,23 +132,40 @@ export default function MainPage() {
   return (
     <div>
       <div className="flex min-h-screen py-20 ">
-        {/* Sidebar */}
-        <aside className="w-64 ml-4  rounded-3xl bg-black/80 shadow-md p-10 text-white flex justify-center">
+        <aside className="w-80 ml-4 rounded-3xl bg-gradient-to-b from-black/90 to-black/70 shadow-xl p-8 text-white">
+          <Card className="bg-transparent border-none text-white">
+            <CardContent className="space-y-6">
+              <div className="flex flex-col items-center space-y-4">
+                <Avatar className="w-32 h-32 border-4 border-white/10">
+                  <AvatarImage src='https://github.com/shadcn.png' alt={`${user.firstName} ${user.lastName}`} />
+                  <AvatarFallback>{user.firstName}{user.lastName}</AvatarFallback>
+                </Avatar>
+                <h2 className="text-2xl font-bold">{user.firstName} {user.lastName}</h2>
+              </div>
 
-          <div className=" space-y-1 flex flex-col justify-center items-center">
-            <Avatar className='w-24 h-24'>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div className="space-y-4 flex flex-col items-center">
+              <Separator className="bg-white/20" />
 
-              <p className="text-xl"> {user.firstName} {user.lastName}</p>
-              <p><span className="font-semibold">BMI:</span> {user.bmi}</p>
-              <p><span className="font-semibold">BMR:</span> {user.bmr}</p>
-              <p><span className="font-semibold">Height:</span> {user.height} cm</p>
-              <p><span className="font-semibold">Weight:</span> {user.weight} kg</p>
-            </div>
-          </div>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <User className="w-5 h-5" />
+                    <span className="font-semibold">BMI:</span>
+                  </div>
+                  <span>{user.bmi.toFixed(1)}</span>
+                </div>
+                <Progress value={bmiProgress} className="h-2" />
+                <p className="text-sm text-center">{bmiCategory}</p>
+              </div>
+
+              <Separator className="bg-white/20" />
+
+              <div className="space-y-4">
+                <StatItem icon={Activity} label="BMR" value={`${user.bmr.toFixed(0)} kcal`} />
+                <StatItem icon={Ruler} label="Height" value={`${user.height} cm`} />
+                <StatItem icon={Weight} label="Weight" value={`${user.weight} kg`} />
+              </div>
+            </CardContent>
+          </Card>
         </aside>
 
         <main className="flex-1 p-10">
@@ -153,7 +183,7 @@ export default function MainPage() {
                   <div className="card-body">
                     <h2 className="card-title text-white">Fitness Goal</h2>
                     {user.dietPlan === 'weight_gain' ? (
-                      <p>Your current goal is to <span className="font-bold text-white">gain weight</span> We know you can do it!</p>
+                      <p className="text-white/80">Your current goal is to <span className="font-bold text-white">gain weight</span> We know you can do it!</p>
                     ) : (
                       <p>Your current goal is to <span className="font-bold text-white">lose weight</span> We know you can do it!</p>
                     )}
@@ -200,7 +230,7 @@ export default function MainPage() {
                 </figure>
                 <div className="card-body">
                   <h2 className="card-title text-white">Daily Health Tips!</h2>
-                    <p className="text-white">{currentTip}</p>         
+                  <p className="text-white">{currentTip}</p>
                 </div>
               </div>
             </div>
@@ -265,7 +295,7 @@ export default function MainPage() {
             </Button>
           </motion.div>
 
-         
+
 
 
         </main>
@@ -275,4 +305,16 @@ export default function MainPage() {
 
     </div>
   );
+}
+
+function StatItem({ icon: Icon, label, value }) {
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center space-x-2">
+        <Icon className="w-5 h-5" />
+        <span className="font-semibold">{label}:</span>
+      </div>
+      <span>{value}</span>
+    </div>
+  )
 }
