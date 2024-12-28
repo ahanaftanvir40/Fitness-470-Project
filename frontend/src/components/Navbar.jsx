@@ -1,6 +1,12 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar"
 
 // react icons
 import { IoIosSearch } from "react-icons/io";
@@ -26,7 +32,10 @@ const ResponsiveNavbar = () => {
             <div className="flex justify-center">
                 <nav
                     className="flex items-center justify-between  w-1/2 relative bg-[#cfcad1] boxShadow rounded-full px-[10px] py-[8px]">
-                    <img src="https://i.ibb.co/0BZfPq6/darklogo.png" alt="logo" className="w-[55px] " />
+                    <Avatar className="w-[50px] ">
+                        <AvatarImage src={logo} alt='asd' />
+                        <AvatarFallback>alt</AvatarFallback>
+                    </Avatar>
                     <ul className="items-center gap-[20px] text-[1rem] text-[#424242] lg:flex hidden">
                         <Link to='/'>
                             <li className="before:w-0 hover:before:w-full before:bg-[#3B9DF8] before:h-[2px] before:transition-all before:duration-300 before:absolute relative before:rounded-full before:bottom-[-2px] hover:text-[#3B9DF8] transition-all duration-300 before:left-0 cursor-pointer capitalize">home</li>
