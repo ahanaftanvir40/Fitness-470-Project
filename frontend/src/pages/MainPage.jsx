@@ -5,6 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -18,7 +23,7 @@ export default function MainPage() {
     dietPlan: '',
   });
 
-  
+
 
 
   //BMI BMR
@@ -86,19 +91,26 @@ export default function MainPage() {
     <div>
       <div className="flex min-h-screen py-20 ">
         {/* Sidebar */}
-        <aside className="w-64 ml-4  rounded-3xl bg-black/80 shadow-md p-10 text-white">
-          <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
-          <div className="space-y-4">
-            <p><span className="font-semibold">Name:</span> {user.firstName} {user.lastName}</p>
-            <p><span className="font-semibold">BMI:</span> {user.bmi}</p>
-            <p><span className="font-semibold">BMR:</span> {user.bmr}</p>
-            <p><span className="font-semibold">Height:</span> {user.height} cm</p>
-            <p><span className="font-semibold">Weight:</span> {user.weight} kg</p>
+        <aside className="w-64 ml-4  rounded-3xl bg-black/80 shadow-md p-10 text-white flex justify-center">
+
+          <div className=" space-y-1 flex flex-col justify-center items-center">
+            <Avatar className='w-24 h-24'>
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="space-y-4 flex flex-col items-center">
+
+              <p className="text-xl"> {user.firstName} {user.lastName}</p>
+              <p><span className="font-semibold">BMI:</span> {user.bmi}</p>
+              <p><span className="font-semibold">BMR:</span> {user.bmr}</p>
+              <p><span className="font-semibold">Height:</span> {user.height} cm</p>
+              <p><span className="font-semibold">Weight:</span> {user.weight} kg</p>
+            </div>
           </div>
         </aside>
 
         <main className="flex-1 p-10">
-          <h1 className="text-3xl font-bold text-black/60 ">Welcome {user.firstName}!</h1>
+          <h1 className="text-xl font-light text-white/80 bg-green-600 w-fit p-2 rounded-lg  ">Welcome {user.firstName}!</h1>
           {user.dietPlan === "weight_gain" && (
             <div className="py-4 w-fit">
               <div className="card bg-base-100 image-full w-96 shadow-xl">
@@ -109,10 +121,10 @@ export default function MainPage() {
                 </figure>
                 <div className="card-body">
                   <h2 className="card-title text-white/80">Fitness Goal</h2>
-                  <p>Your current goal is to gain weight. We know you can do it!</p>
+                  <p>Your current goal is to <span className="font-bold text-white">gain weight</span> We know you can do it!</p>
                   <div className="card-actions justify-end">
                     <Link to="/roadmap">
-                      <button className="btn btn-primary">Roadmap</button>
+                      <button className="btn btn-primary text-white">Roadmap</button>
                     </Link>
                   </div>
                 </div>
