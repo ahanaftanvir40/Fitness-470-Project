@@ -10,7 +10,7 @@ const UserProvider = ({ children }) => {
     const userFetch = async () => {
         try {
             setIsLoading(true);
-            const res = await axios.get("http://localhost:3000/api/profile", {
+            const res = await axios.get("http://localhost:3000/api/user/profile", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -29,7 +29,7 @@ const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, isLoading }}>
+        <UserContext.Provider value={{ user, setUser, isLoading }}>
             {children}
         </UserContext.Provider>
     );

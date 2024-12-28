@@ -5,6 +5,7 @@ import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import ProtectedRoutes from '../../utils/ProtectedRoutes'
 import MainPage from '../pages/MainPage'
+import Roadmap from '../pages/Roadmap'
 
 
 export default function AllRoutes() {
@@ -15,6 +16,7 @@ export default function AllRoutes() {
             <Route path='/signup' element={<SignUp />} />
             <Route element={<ProtectedRoutes />}>
                 <Route path='/main' element={<MainPage />} />
+                <Route path='/roadmap' element={<Roadmap />} />
             </Route>
         </Routes>
     )

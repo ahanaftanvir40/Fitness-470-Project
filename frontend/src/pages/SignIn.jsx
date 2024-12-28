@@ -18,7 +18,7 @@ export default function SignIn() {
         e.preventDefault()
 
         try {
-            const response = await axios.post('http://localhost:3000/api/signin', user)
+            const response = await axios.post('http://localhost:3000/api/user/signin', user)
             if (response.data.success) {
                 localStorage.setItem('token', response.data.token)
                 navigate('/main')

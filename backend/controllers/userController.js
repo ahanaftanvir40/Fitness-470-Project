@@ -3,7 +3,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export async function SignUp(req, res) {
-    const { firstName, lastName, username, email, password } = req.body;
+    const { firstName, lastName, username, email, password, gender, age, dietPlan } = req.body;
+    console.log("REQ BODY", req.body);
+
     try {
         // Check if user already exists
         const existingUser = await userModel.findOne({ email });
@@ -18,6 +20,9 @@ export async function SignUp(req, res) {
         const newUser = new userModel({
             firstName,
             lastName,
+            gender,
+            age,
+            dietPlan,
             username,
             email,
             password: hashedPassword,
@@ -82,5 +87,22 @@ export async function GetUserProfile(req, res) {
         res.status(200).json({ user });
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
+    }
+}
+
+export async function updateUser(req, res) {
+    const { height, weight, dietPlan, bmi, bmr } = req.body;
+    try {
+        const user = await userModel.findById(req.user.id);
+        user.height = height;
+        user.weight = weight;
+        user.dietPlan = dietPlan;
+        user.bmi = bmi;
+        user.bmr = bmr;
+        const savedUser = await user.save();
+        res.status(200).json({ message: "User updated", user: savedUser })
+
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error, code: 400 });
     }
 }

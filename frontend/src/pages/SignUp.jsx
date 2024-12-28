@@ -8,7 +8,9 @@ export default function SignUp() {
         email: '',
         password: '',
         firstName: '',
-        lastName: ''
+        lastName: '',
+        gender: '',
+        age: ''
     });
     const navigate = useNavigate()
     const handleChange = (e) => {
@@ -25,7 +27,7 @@ export default function SignUp() {
         console.log(user);
 
         try {
-            const response = await axios.post('http://localhost:3000/api/signup', user);
+            const response = await axios.post('http://localhost:3000/api/user/signup', user);
             console.log(response.data);
             if (response.data.success) {
                 navigate('/signin');
@@ -58,6 +60,23 @@ export default function SignUp() {
                                     <span className="label-text text-black/70">Last Name</span>
                                 </label>
                                 <input name='lastName' onChange={handleChange} type="text" placeholder="last name" className="input input-bordered bg-white text-black/60" required />
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text text-black/70">Gender</span>
+                                </label>
+                                <select name='gender' onChange={handleChange} className="select select-bordered bg-white text-black/60" required>
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text text-black/70">Age</span>
+                                </label>
+                                <input name='age' onChange={handleChange} type="number" placeholder="age" className="input input-bordered bg-white text-black/60" required />
                             </div>
                             <div className="form-control">
                                 <label className="label">

@@ -1,0 +1,162 @@
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import axios from "axios";
+
+function Roadmap() {
+    const [user, setUser] = useState({});
+    const [meals, setMeals] = useState([]);
+    const [exercises, setExercises] = useState([]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/api/user/profile', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+                setUser(response.data.user);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
+        const weightLossMeals = [
+            { name: "Breakfast", calories: 300, protein: 20, carbs: 30, fat: 10 },
+            { name: "Lunch", calories: 400, protein: 30, carbs: 40, fat: 15 },
+            { name: "Dinner", calories: 350, protein: 25, carbs: 35, fat: 12 },
+        ];
+
+        const weightGainMeals = [
+            { name: "Breakfast", calories: 500, protein: 30, carbs: 60, fat: 15 },
+            { name: "Lunch", calories: 700, protein: 40, carbs: 80, fat: 20 },
+            { name: "Dinner", calories: 600, protein: 35, carbs: 70, fat: 18 },
+        ];
+
+        setMeals(user.dietPlan === "weight_loss" ? weightLossMeals : weightGainMeals);
+
+        const mockExercises = [
+            { name: "Cardio", duration: 30, caloriesBurned: 300 },
+            { name: "Strength Training", duration: 45, caloriesBurned: 200 },
+            { name: "Yoga", duration: 60, caloriesBurned: 150 },
+        ];
+        setExercises(mockExercises);
+    }, [user]);
+
+    const dietChartData = meals.map(meal => ({
+        name: meal.name,
+        calories: meal.calories,
+        protein: meal.protein,
+        carbs: meal.carbs,
+        fat: meal.fat,
+    }));
+
+    if (!user) {
+        return <div>No user data available</div>;
+    }
+
+    return (
+        <div className="min-h-screen bg-gray-100 p-8 rounded-t-3xl mt-10">
+            <h1 className="text-3xl font-bold text-gray-800 mb-8">Your {user.dietPlan === "weight_loss" ? "Weight Loss" : "Weight Gain"} Plan</h1>
+
+            <Tabs defaultValue="meals" className="w-full">
+                <TabsList>
+                    <TabsTrigger value="meals">Daily Meals</TabsTrigger>
+                    <TabsTrigger value="exercises">Exercises</TabsTrigger>
+                    <TabsTrigger value="chart">Diet Chart</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="meals">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Your Daily Meals</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Meal</TableHead>
+                                        <TableHead>Calories</TableHead>
+                                        <TableHead>Protein (g)</TableHead>
+                                        <TableHead>Carbs (g)</TableHead>
+                                        <TableHead>Fat (g)</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {meals.map((meal, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell>{meal.name}</TableCell>
+                                            <TableCell>{meal.calories}</TableCell>
+                                            <TableCell>{meal.protein}</TableCell>
+                                            <TableCell>{meal.carbs}</TableCell>
+                                            <TableCell>{meal.fat}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                <TabsContent value="exercises">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Recommended Exercises</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Exercise</TableHead>
+                                        <TableHead>Duration (minutes)</TableHead>
+                                        <TableHead>Calories Burned</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {exercises.map((exercise, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell>{exercise.name}</TableCell>
+                                            <TableCell>{exercise.duration}</TableCell>
+                                            <TableCell>{exercise.caloriesBurned}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                <TabsContent value="chart">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Diet Chart</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <ResponsiveContainer width="100%" height={400}>
+                                <BarChart data={dietChartData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="calories" fill="#8884d8" />
+                                    <Bar dataKey="protein" fill="#82ca9d" />
+                                    <Bar dataKey="carbs" fill="#ffc658" />
+                                    <Bar dataKey="fat" fill="#ff8042" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
+        </div>
+    );
+}
+
+export default Roadmap;
