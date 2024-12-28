@@ -131,7 +131,7 @@ export default function MainPage() {
 
   return (
     <div>
-      <div className="flex min-h-screen py-20 ">
+      <div className="flex min-h-screen py-10">
         <aside className="w-80 ml-4 rounded-3xl bg-gradient-to-b from-black/90 to-black/70 shadow-xl p-8 text-white">
           <Card className="bg-transparent border-none text-white">
             <CardContent className="space-y-6">
@@ -170,10 +170,10 @@ export default function MainPage() {
 
         <main className="flex-1 p-10">
           <h1 className="text-xl font-light text-white/80 bg-pink-600 w-fit p-2 mx-auto rounded-lg mb-6 border-8 border-pink-500 ">Welcome {user.firstName}</h1>
-          <div className="flex gap-10 justify-center">
+          <div className="flex gap-6">
             {user.dietPlan && (
               <div className="py-4 w-fit">
-                <div className="card bg-base-100 image-full w-96 h-64 shadow-xl">
+                <div className="card bg-base-100 image-full w-[360px] h-64 shadow-xl">
                   <figure>
                     <img
                       className=" object-cover"
@@ -200,7 +200,7 @@ export default function MainPage() {
 
 
             <div className="py-4 w-fit">
-              <div className="card bg-base-100 image-full w-96 h-64 shadow-xl">
+              <div className="card bg-base-100 image-full w-[360px] h-64 shadow-xl">
                 <figure>
                   <img
                     className=" object-c"
@@ -221,7 +221,7 @@ export default function MainPage() {
             </div>
 
             <div className="py-4 w-fit">
-              <div className="card bg-base-100 image-full w-96 h-64 shadow-xl">
+              <div className="card bg-base-100 image-full w-[360px] h-64 shadow-xl">
                 <figure>
                   <img
                     className=" object-c"
@@ -232,6 +232,27 @@ export default function MainPage() {
                   <h2 className="card-title text-white">Daily Health Tips!</h2>
                   <p className="text-white">{currentTip}</p>
                 </div>
+              </div>
+            </div>
+
+            <div className="py-4 w-fit">
+              <div className="card bg-base-100 image-full w-[360px] h-64 shadow-xl">
+                <figure>
+                  <img
+                    className=" object-c"
+                    src='https://img.freepik.com/free-photo/after-gym-is-time-little-chat_329181-11231.jpg'
+                    alt="Shoes" />
+                </figure>
+                <div className="card-body">
+                  <h2 className="card-title text-white">Fitness Blogs</h2>
+                  <p className="text-white">Stay updated with the latest trends, tips, and advice on fitness and health.</p>
+                  <div className="card-actions justify-end">
+                    <Link to="/blog">
+                      <button className="btn btn-primary text-white">View Blogs</button>
+                    </Link>
+                  </div>
+                </div>
+
               </div>
             </div>
 
