@@ -19,6 +19,7 @@ import tipsImg from '../assets/tipsImg.jpg'
 import { User, Activity, Ruler, Weight } from 'lucide-react'
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
+import ChatBot from "@/components/ChatBot";
 
 export default function MainPage() {
   const { user, isLoading, setUser } = useUserContext();
@@ -30,6 +31,7 @@ export default function MainPage() {
 
   const [tips, setTips] = useState([]);
   const [currentTip, setCurrentTip] = useState('')
+  const [show, setShow] = useState(false);
 
 
 
@@ -321,10 +323,24 @@ export default function MainPage() {
 
         </main>
 
+        <motion.div
+          className="fixed bottom-10 left-10"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <Button onClick={() => setShow(!show)} className="bg-blue-600 hover:bg-blue-500 text-white rounded-full p-10 shadow-lg">
+            Chat With AI Trainer
+          </Button>
+        </motion.div>
+
+        {show && (
+          <ChatBot />
+        )}
+
       </div>
 
 
-    </div>
+    </div >
   );
 }
 
