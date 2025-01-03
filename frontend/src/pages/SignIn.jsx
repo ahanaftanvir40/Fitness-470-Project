@@ -33,14 +33,13 @@ export default function SignIn() {
         <div>
             <div className="hero bg-[#e1dae4] min-h-screen">
                 <div className="hero-content flex-col lg:flex-row-reverse">
-                    <div className="text-center lg:text-left text-black/60">
-                        <h1 className="text-5xl font-bold">Sign In now!</h1>
-                        <p className="py-6">
-                            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-                            quasi. In deleniti eaque aut repudiandae et a id nisi.
+                    <div className="text-center lg:text-left text-green-600">
+                        <h1 className="text-5xl font-bold">Sign In now</h1>
+                        <p className="py-6 text-black/60">
+                            Join our fitness community and take the first step towards a healthier, happier you. Sign in to access personalized workout plans, track your progress, and connect with fitness enthusiasts just like you. Lets achieve your fitness goals together!
                         </p>
                     </div>
-                    <div className="card bg-[#9389bd]  w-full max-w-sm shrink-0 shadow-2xl">
+                    <div className="card bg-white/60  w-full max-w-sm shrink-0 shadow-2xl">
                         <form onSubmit={handleSubmit} className="card-body ">
                             <div className="form-control">
                                 <label className="label">

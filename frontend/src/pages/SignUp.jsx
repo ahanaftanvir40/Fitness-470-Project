@@ -42,12 +42,12 @@ export default function SignUp() {
             <div className="hero bg-[#e1dae4] min-h-screen">
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left text-black/60">
-                        <h1 className="text-5xl font-bold">Sign Up now!</h1>
+                        <h1 className="text-5xl font-bold">Sign Up now</h1>
                         <p className="py-6">
-                            Join our job portal and find your dream job today!
+                            Join our fitness community and start your journey towards a healthier, happier you. Whether you are looking to lose weight, build muscle, or just stay active, we have the resources and support you need to achieve your goals. Sign up today and take the first step towards a better you!
                         </p>
                     </div>
-                    <div className="card bg-[#9389bd] w-full max-w-sm shrink-0 shadow-2xl">
+                    <div className="card bg-white/60 w-full max-w-sm shrink-0 shadow-2xl">
                         <form onSubmit={handleSubmit} className="card-body">
                             <div className="form-control">
                                 <label className="label">

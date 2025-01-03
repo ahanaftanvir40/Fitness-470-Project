@@ -1,10 +1,14 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { CalendarIcon, ClockIcon } from 'lucide-react'
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon, ClockIcon } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Assuming you have a Dialog component.
 
 function Blogs() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedPost, setSelectedPost] = useState(null);
 
     const blogPosts = [
         {
@@ -62,9 +66,18 @@ function Blogs() {
     const featuredPost = blogPosts[0];
     const recentPosts = blogPosts.slice(1);
 
-    return (
-        <div className="min-h-screen ">
+    const openModal = (post) => {
+        setSelectedPost(post);
+        setIsModalOpen(true);
+    };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedPost(null);
+    };
+
+    return (
+        <div className="min-h-screen">
             <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 {/* Featured Post */}
                 <FeaturedPost post={featuredPost} />
@@ -74,17 +87,39 @@ function Blogs() {
                     <h2 className="text-2xl font-bold mb-6">Recent Posts</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {recentPosts.map((post) => (
-                            <BlogPostCard key={post.id} post={post} />
+                            <BlogPostCard key={post.id} post={post} openModal={openModal} />
                         ))}
                     </div>
                 </div>
             </main>
+
+            {/* Modal */}
+            {selectedPost && (
+                <Dialog open={isModalOpen} onOpenChange={closeModal}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>{selectedPost.title}</DialogTitle>
+                        </DialogHeader>
+                        <div>
+                            <img
+                                src={selectedPost.imageUrl}
+                                alt={selectedPost.title}
+                                className="w-full h-64 object-cover mb-4 rounded-lg"
+                            />
+                            <Badge variant="secondary" className="mb-4">{selectedPost.category}</Badge>
+                            <p className="mb-4 text-gray-600">{selectedPost.excerpt}</p>
+                            <p className="text-gray-800">{`By ${selectedPost.author} on ${selectedPost.date}`}</p>
+                            <p className="text-gray-800 mt-2">{`Read Time: ${selectedPost.readTime}`}</p>
+                        </div>
+                        <Button onClick={closeModal} variant="outline" className="mt-6">Close</Button>
+                    </DialogContent>
+                </Dialog>
+            )}
         </div>
-    )
+    );
 }
 
-export default Blogs
-
+export default Blogs;
 
 function FeaturedPost({ post }) {
     return (
@@ -116,10 +151,10 @@ function FeaturedPost({ post }) {
                 </div>
             </CardContent>
         </Card>
-    )
+    );
 }
 
-function BlogPostCard({ post }) {
+function BlogPostCard({ post, openModal }) {
     return (
         <Card>
             <CardHeader className="p-0">
@@ -141,11 +176,8 @@ function BlogPostCard({ post }) {
                         <span>{post.readTime}</span>
                     </div>
                 </div>
-                <Button variant="outline" size="sm">Read More</Button>
+                <Button onClick={() => openModal(post)} variant="outline" size="sm">Read More</Button>
             </CardFooter>
         </Card>
-    )
+    );
 }
-
-
-

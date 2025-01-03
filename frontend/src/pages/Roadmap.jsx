@@ -11,6 +11,8 @@ function Roadmap() {
     const [meals, setMeals] = useState([]);
     const [exercises, setExercises] = useState([]);
     const [suggestedMeals, setSuggestedMeals] = useState();
+    const [selectedMeal, setSelectedMeal] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
 
 
@@ -88,6 +90,17 @@ function Roadmap() {
         carbs: meal.carbs,
         fat: meal.fat,
     }));
+
+
+    const openModal = (meal) => {
+        setSelectedMeal(meal);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setSelectedMeal(null);
+        setIsModalOpen(false);
+    };
 
     if (!user) {
         return <div>No user data available</div>;
@@ -168,10 +181,17 @@ function Roadmap() {
                                             <h2 className="card-title text-gray-50">{meal.name}</h2>
                                             <p className="text-white/80">{meal.description}</p>
                                             <div className="card-actions justify-end">
-                                                <button className="btn btn-primary text-white">Recipe</button>
+                                                <button
+                                                    className="btn btn-primary text-white"
+                                                    onClick={() => openModal(meal)}
+                                                >
+                                                    Recipe
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
+
+
                                 </>
                             ))}
 
@@ -231,6 +251,23 @@ function Roadmap() {
                     </Card>
                 </TabsContent>
             </Tabs>
+
+            {/* Modal */}
+            {isModalOpen && selectedMeal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-lg w-11/12 max-w-md">
+                        <h2 className="text-xl font-bold mb-4">{selectedMeal.name} Recipe</h2>
+                        <img src={selectedMeal.image} alt={selectedMeal.name} className="w-full h-64 object-cover rounded mb-4" />
+                        <p>{selectedMeal.recipe}</p>
+                        <button
+                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                            onClick={closeModal}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
